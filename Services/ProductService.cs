@@ -13,10 +13,17 @@ public class ProductService : IProductService
         _repository = repository;
     }
 
-    public async Task<List<ProductResponseDto>> GetAllAsync()
+    public async Task<PagedResultDto<ProductResponseDto>> GetAllAsync(ProductQueryParams queryParams)
     {
-        var products = await _repository.GetAllAsync();
-        return products.Select(MapToDto).ToList();
+        var (items, totalCount) = await _repository.GetAllAsync(queryParams);
+
+        return new PagedResultDto<ProductResponseDto>
+        {
+            Items = items.Select(MapToDto).ToList(),
+            TotalCount = totalCount,
+            Page = queryParams.Page,
+            PageSize = queryParams.PageSize
+        };
     }
 
     public async Task<ProductResponseDto?> GetByIdAsync(int id)

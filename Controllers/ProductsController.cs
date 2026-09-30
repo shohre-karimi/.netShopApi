@@ -17,13 +17,12 @@ public class ProductsController : ControllerBase
         _service = service;
     }
     [HttpGet]
-    public async Task<ActionResult<List<ProductResponseDto>>> GetAll()
+
+    public async Task<ActionResult<PagedResultDto<ProductResponseDto>>> GetAll([FromQuery] ProductQueryParams queryParams)
     {
-
-        var products = await _service.GetAllAsync();
-        return Ok(products);
+        var result = await _service.GetAllAsync(queryParams);
+        return Ok(result);
     }
-
     [HttpGet("{id}")]
     public async Task<ActionResult<ProductResponseDto>> GetById(int id)
     {

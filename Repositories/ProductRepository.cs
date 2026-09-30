@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ShopApi.Data;
+using ShopApi.DTOs;
 using ShopApi.Models;
 
 namespace ShopApi.Repositories;
@@ -13,9 +14,35 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public async Task<List<Product>> GetAllAsync()
+    public async Task<(List<Product> Items, int TotalCount)> GetAllAsync(ProductQueryParams queryParams)
     {
-        return await _context.Products.ToListAsync();
+        var query = _context.Products.AsQueryable();
+
+        // فیلتر بر اساس جستجوی اسم
+        if (!string.IsNullOrWhiteSpace(queryParams.SearchTerm))
+        {
+            query = query.Where(p => p.Name.Contains(queryParams.SearchTerm));
+        }
+
+        // فیلتر بر اساس بازه‌ی قیمت
+        if (queryParams.MinPrice.HasValue)
+        {
+            query = query.Where(p => p.Price >= queryParams.MinPrice.Value);
+        }
+
+        if (queryParams.MaxPrice.HasValue)
+        {
+            query = query.Where(p => p.Price <= queryParams.MaxPrice.Value);
+        }
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .Skip((queryParams.Page - 1) * queryParams.PageSize)
+            .Take(queryParams.PageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
     }
 
     public async Task<Product?> GetByIdAsync(int id)
