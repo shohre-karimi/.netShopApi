@@ -5,3 +5,7 @@ obj/
 *.db-wal
 *.user
 .vscode/
+# Angular frontend
+shop-frontend/node_modules/
+shop-frontend/dist/
+shop-frontend/.angular/
