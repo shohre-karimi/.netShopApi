@@ -1,0 +1,40 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    </div>
+    <h1>خوش برگشتی 👋</h1>
+    <p class="subtitle">برای مدیریت محصولات وارد حسابت شو</p>
+
+    @if (error()) {
+      <div class="alert">{{ error() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label class="field">
+        <span>یوزرنیم</span>
+        <input class="input" formControlName="username" autocomplete="username" placeholder="یوزرنیم خود را وارد کنید" />
+        @if (form.controls.username.touched && form.controls.username.invalid) {
+          <small class="field-error">یوزرنیم الزامیه</small>
+        }
+      </label>
+
+      <label class="field">
+        <span>پسورد</span>
+        <input class="input" type="password" formControlName="password" autocomplete="current-password" placeholder="••••••••" />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <small class="field-error">پسورد الزامیه</small>
+        }
+      </label>
+
+      <button type="submit" class="btn block" [disabled]="loading()">
+        @if (loading()) {
+          <span class="spinner"></span>
+        }
+        ورود
+      </button>
+    </form>
+
+    <p class="switch">حساب نداری؟ <a routerLink="/register">ثبت‌نام کن</a></p>
+  </div>
+</div>

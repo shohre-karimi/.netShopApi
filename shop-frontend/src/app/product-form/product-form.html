@@ -1,0 +1,57 @@
+<main class="container narrow">
+  <a class="back-link" routerLink="/products">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    بازگشت به محصولات
+  </a>
+
+  <div class="page-header">
+    <div>
+      <h1>{{ id === null ? 'محصول جدید' : 'ویرایش محصول' }}</h1>
+      <p>{{ id === null ? 'اطلاعات محصول جدید رو وارد کن' : 'تغییرات لازم رو اعمال کن' }}</p>
+    </div>
+  </div>
+
+  <div class="panel padded">
+    @if (error()) {
+      <div class="alert">{{ error() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label class="field">
+        <span>نام محصول</span>
+        <input class="input" formControlName="name" placeholder="مثلاً: هدفون بی‌سیم" />
+        @if (form.controls.name.touched && form.controls.name.invalid) {
+          <small class="field-error">نام باید بین ۲ تا ۱۰۰ کاراکتر باشه</small>
+        }
+      </label>
+
+      <div class="form-row">
+        <label class="field">
+          <span>موجودی</span>
+          <input class="input" type="number" formControlName="stock" min="0" />
+          @if (form.controls.stock.touched && form.controls.stock.invalid) {
+            <small class="field-error">موجودی باید صفر یا بیشتر باشه</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>قیمت</span>
+          <input class="input" type="number" formControlName="price" min="0" step="any" />
+          @if (form.controls.price.touched && form.controls.price.invalid) {
+            <small class="field-error">قیمت باید بیشتر از صفر باشه</small>
+          }
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn" [disabled]="saving()">
+          @if (saving()) {
+            <span class="spinner"></span>
+          }
+          {{ id === null ? 'ساخت محصول' : 'ذخیره‌ی تغییرات' }}
+        </button>
+        <a class="btn ghost" routerLink="/products">انصراف</a>
+      </div>
+    </form>
+  </div>
+</main>

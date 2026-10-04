@@ -1,0 +1,40 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6"/><path d="M22 11h-6"/></svg>
+    </div>
+    <h1>ساخت حساب جدید</h1>
+    <p class="subtitle">چند ثانیه بیشتر طول نمی‌کشه</p>
+
+    @if (error()) {
+      <div class="alert">{{ error() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label class="field">
+        <span>یوزرنیم</span>
+        <input class="input" formControlName="username" autocomplete="username" placeholder="حداقل ۳ کاراکتر" />
+        @if (form.controls.username.touched && form.controls.username.invalid) {
+          <small class="field-error">یوزرنیم باید بین ۳ تا ۵۰ کاراکتر باشه</small>
+        }
+      </label>
+
+      <label class="field">
+        <span>پسورد</span>
+        <input class="input" type="password" formControlName="password" autocomplete="new-password" placeholder="حداقل ۶ کاراکتر" />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <small class="field-error">پسورد باید حداقل ۶ کاراکتر باشه</small>
+        }
+      </label>
+
+      <button type="submit" class="btn block" [disabled]="loading()">
+        @if (loading()) {
+          <span class="spinner"></span>
+        }
+        ثبت‌نام
+      </button>
+    </form>
+
+    <p class="switch">حساب داری؟ <a routerLink="/login">وارد شو</a></p>
+  </div>
+</div>
